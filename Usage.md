@@ -1,13 +1,13 @@
 #Usage
 
-# Code Examples
+## Code Examples
 
-Variables used in these examples:
-	- **_hostname:port_** values are all site specific
-	- **_@path@_** is defined by the team that sets up the zUID service
-	- **_@key@_** is 1 to 255 character value that represents the key
+Variables used in these examples:  
+    - **_hostname:port_** values are all site specific  
+    - **_@path@_** is defined by the team that sets up the zUID service  
+    - **_@key@_** is 1 to 255 character value that represents the key
 
-## curl:
+### curl:
 - Retrieve a value from the zECS instance.
 ```curl -X GET "http://hostname:port@path@@key@"```
 	
@@ -17,16 +17,16 @@ Variables used in these examples:
 - Delete a key from the instance.
 ```curl -X DELETE "http://hostname:port@path@@key@"```
 	
-## COBOL CICS:
+### COBOL CICS:
 - Refer to [readme_COBOL_ex1](./readme_COBOL_ex1.md). Shows an insert, retrieve and delete for a key.
 	
-## standard browser (Chrome, IE, Safari):
+### Standard browser (Chrome, IE, Safari):
 - Can only submit GET requests from the browser. Will need other tools like ARC (Advanced REST Client), DCH REST Client, SOAP-UI or Postman to execute additional requests with POST/PUT/DELETE.
 	
 	Retrieve the value for specified key:
 	http://hostname:port@path@/@key@
 	
-## Javascript:
+### JavaScript:
 - This small snippet of code will show how to write, read and delete a key/value pair to the zECS instance.
 	
     ```javascript
@@ -56,7 +56,7 @@ Variables used in these examples:
 ```
 
 
-# HTTP Status Codes
+## HTTP Status Codes
 - 200 - Success
 - 204 - Record not found
 - 400 - WEB RECEIVE error
@@ -69,21 +69,21 @@ Variables used in these examples:
 - 507 - ZCxxFILE error
     
 
-# Installation
+## Installation
 
 Refer to the [installation instructions](./Installation.md) for complete setup in the z/OS environment.
 
 
 
-# API Reference
+## API Reference
 
-## Query string parameters:
+### Query string parameters:
 - ttl=99999
    This is only valid with the PUT/POST methods and specifies time to live in seconds for each key. It's a numeric value between 300 (5 minutes) and 86400 (24 hours) seconds. If not specified it defaults to 30 minutes or 1800 seconds. The built-in background expiration process automatically cleans up expired keys. 
 - clear=*
    This is a request to clear all the keys from the zECS instance and only valid with the DELETE method.
 
-## Example URL calls:
+### Example URL calls:
 - GET - http://hostname:port@path@{up_to_255_byte_key}
 	No body.
 	
@@ -97,5 +97,5 @@ Refer to the [installation instructions](./Installation.md) for complete setup i
 	No body. The key is removed from the instance.
 
 	
-## HTTP Headers
+### HTTP Headers
 - None
