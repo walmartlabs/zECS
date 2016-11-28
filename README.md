@@ -46,7 +46,7 @@ Variables used in these examples:
 ```curl -X DELETE "http://hostname:port@path@@key@"```
 	
 ## COBOL CICS:
-- Refer to [readme_COBOL_ex1](https://github.com/wamasoz/ECS/blob/master/readme_COBOL_ex1.md). Shows an insert, retrieve and delete for a key.
+- Refer to [readme_COBOL_ex1](./readme_COBOL_ex1.md). Shows an insert, retrieve and delete for a key.
 	
 ## standard browser (Chrome, IE, Safari):
 - Can only submit GET requests from the browser. Will need other tools like ARC (Advanced REST Client), DCH REST Client, SOAP-UI or Postman to execute additional requests with POST/PUT/DELETE.
