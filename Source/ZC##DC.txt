@@ -1,0 +1,2 @@
+type: AS
+http://sysplex01-ecs.mycompany.com:@rep_port@

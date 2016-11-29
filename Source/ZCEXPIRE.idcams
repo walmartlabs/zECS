@@ -1,0 +1,21 @@
+ DELETE @ecs_hlq@.ZCEXPIRE.@environment@ CLUSTER PURGE
+ SET MAXCC=0
+
+ DEFINE CLUSTER -
+ (NAME(@ecs_hlq@.ZCEXPIRE.@environment@) -
+ BUFFERSPACE(7168) -
+ DATACLAS(@data_class@) -
+ INDEXED -
+ KEYS(4 0) -
+ MANAGEMENTCLASS(@mgt_class@) -
+ LOG(UNDO) -
+ RECORDSIZE(80 2048) -
+ SHAREOPTIONS(2 3) -
+ RECOVERY -
+ STORAGECLASS(@stg_class@)) -
+ DATA(NAME(@ecs_hlq@.ZCEXPIRE.@environment@.DATA) -
+ CYLINDERS(10 2) -
+ CONTROLINTERVALSIZE(2560)) -
+ INDEX(NAME(@ecs_hlq@.ZCEXPIRE.@environment@.INDEX) -
+ TRACKS(1 1) -
+ CONTROLINTERVALSIZE(2048))
