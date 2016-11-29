@@ -1,4 +1,4 @@
-# Installation
+## Installation
 
 ### Installation prerequisite
 If you plan on using the supplied assembly and link job, you will need to customize the DFHEITAL and DFHYITVL procs from
@@ -14,13 +14,13 @@ DEV, QA and PROD. The environment name cannot exceed eight characters.
 
 ### Security ###
 The default CICS userid will need access to run each instance of the transaction ID. It is recommended a block of
-transactions be reserved for the service. The supplied definitions assume ZECS transaction will begin with "ZC" giving a
-range of ZC00 to ZCZZ.
+transactions be reserved for the service. The supplied definitions assume the ZECS transactions will begin with "ZC"
+giving a range of ZC00 to ZCZZ.
 
 For those implementations using https and a TCPIPService definition with the AUTHENTICATE parameter set to BASIC, the
 authenticated userid will also need access to the transaction.
 
-Administrators should have access to transaction ZPLT to define the named counter prior to the first execution.
+Administrators should have access to transaction ZPLT to start the expiration process.
 
 ### Network Considerations ###
 The strategy used by this implementation uses a cluster of application owner regions (AORs). No webservice owning
@@ -29,7 +29,7 @@ port sharing.
 
 The port or ports reserved for this service are defined to a virtual IP address (VIPA) distribute statement (VIPADIST)
 and the port is defined as a shared port (SHAREP). Binding the port to the distributed VIPA is optional. With this
-arrangement, CICS regons are free to move around and supports more than one region on a LPAR.
+arrangement, CICS regions are free to move around and supports more than one region on a LPAR.
 
 The preferred approach is to use a unique host name per instance which will allow a single instance to be moved without
 affecting any other instances. The unique host names would be assigned to the VIPA distribute address assigned to the
@@ -53,14 +53,14 @@ names would be the ones pointing to the VIPA distribute address on their respect
 1. Download the ZECS repository to your local workstation.
 
 1. Allocate a JCL and source library on the mainframe. Both libraries will
-need to have a record format of FB, a logical record length of 80 and be a dataset type of PDS or PDSE.
+need to have a record format of FB, a logical record length of 80 and be a dataset type of PDS or LIBRARY.
 
 1. FTP the JCL in the JCL folder to the JCL library you have allocated.
 
-1. FTP the source code and definition in the source folder to the source library you have allocated.
+1. FTP the source code and definitions in the source folder to the source library you have allocated.
 
-1. Copy the ZECSZFC and ZECSZKC from the source library to a copybook library used by the DFHEITAL and DFHYITVL procs or
-used by your own compile processes.
+1. Copy the ZECSZFC and ZECSZKC from the source library to a copybook library used by your own compile processes
+if you do not plan on using the DFHEITAL and DFHYITVL procs.
 
 1. *In the source library, locate the CONFIG member and edit it.* This file contains a list of configuration items used
 to configure the JCL and source. The file itself provides a brief description of each configuration item. Comments are
@@ -78,7 +78,7 @@ denoted by leading asterisk in the first word. The first word is the configurati
 
     1. **@csd_list@** is the CSD group list name. This is the list name to use for the ZECS group.
     
-    1. **@data_class@** is the DATACLASS used by IDCAMS for defining ECS files
+    1. **@data_class@** is the DATACLASS used by IDCAMS for defining ZECS files
 
     1. **@doct_dd@** is the document template DDNAME defined to CICS region.
 
@@ -88,12 +88,10 @@ denoted by leading asterisk in the first word. The first word is the configurati
 
     1. **@https_port@** is the https port number to be used for ZECS.
 
-    1. **@job_parms@** are the parameters following the JOB in the JOB card. Be mindful. This substitution will only
+    1. **@job_parms@** are the parameters following JOB in the JOB card. Be mindful. This substitution will only
     handle one line worth of JOB parameters when customizing jobs.
 
-    1. **@mgt_class@** is the MANAGEMENTCLASS used by IDCAMS for defining ECS files.
-
-    1. **@pri_cyl@** is the primary number of cylinders for ZECS files.
+    1. **@mgt_class@** is the MANAGEMENTCLASS used by IDCAMS for defining ZECS files.
 
     1. **@proc_lib@** (Optional) is the dataset containing the customized version of the DFHEITAL proc supplied by IBM.
     If you plan to use the supplied assembly job, the proc library is required.
@@ -102,8 +100,6 @@ denoted by leading asterisk in the first word. The first word is the configurati
     job, the program load library is required.
 
     1. **@rep_port@** is the replication port number. See replication.
-
-    1. **@sec_cyl@** is the secondary number of cylinders for ZECS files.
 
     1. **@source_lib@** is the dataset containing ZECS source code.
 
@@ -126,10 +122,11 @@ customizations will need to be made.
 1. Submit the CONFIG job. It should complete with return code 0. The remaining jobs and CSD definitions have been
 customized.
 
-1. Assemble the source (Optional). An assembly and link job has been provided to assemble the programs used for ZECS.
-    1. Using ASMZECS. The provided job ASMZECS utilizes the DFHEITAL proc from IBM for tranlating CICS commands. The
-    DFHEITAL proc must be customized and available in the library specified earlier in the @proc_lib@ configuration item.
-    Submit the ASMZECS job. It should end with return code 0.
+1. Assemble the source. An assembly and link job has been provided to assemble the programs used for ZECS. You may use
+the supplied job or use your own job.
+    1. Using ASMZECS. The provided job ASMZECS utilizes the DFHEITAL and DFHYITVL procs from IBM for tranlating CICS 
+    commands. The DFHEITAL and DFHYITVL procs must be customized and available in the library specified earlier in the 
+    @proc_lib@ configuration item. Submit the ASMZECS job. It should end with return code 4 or less.
     1. Using your own assembly/compile and link jobs. If you wish to use your own assembly/compile jobs, here is a list
     of programs and their languages. Copybooks ZECSZFC and ZECSZKC will need to be available for Cobol compiles.
         1. ZECSNC   *Assembler*
@@ -165,10 +162,10 @@ instructions for PLT-program list table in IBM Knowledge Center for CICS.
 of the CICS regions.
 
 #### Define a ZECS instance
-1. Define an instance of ZECS. In the JCL library, the DEFZC@@ member provides the JCL to define one instance of ZECS.
+1. Define an instance of ZECS. In the JCL library, the DEFZC## member provides the JCL to define one instance of ZECS.
 While some parts of the job are customized, some parameters are left untouched so the process on installing a ZECS
 instance is repeatable. Keep in mind, you will want some method of keeping track of your clients and which instance of
-ZECS you have created for them. Recording the path as well is a good idea. Edit DEFZC@@ in the JCL library and
+ZECS you have created for them. Recording the path as well is a good idea. Edit DEFZC## in the JCL library and
 customize the following fields.
     1. **@appname@** is the application name using this instance of ZECS. It is the fourth node of the path.
     1. **@environment@** is eight character environment name such as DEV, QA, PROD discussed during planning. This
@@ -176,17 +173,20 @@ customize the following fields.
     1. **@grp_list@** is the CSD group list you wish this instance to be installed.
     1. **@id@** is the two character ZECS instance identifier ranging from 00 to ZZ.
     1. **@org@** is the organization identifier used in the path of the service.
+    1. **@pri_cyl@** is the primary number of cylinders for ZFAM files.
     1. **scheme** is the setting for the SCHEME parameter on the URIMAP definition. Use either http or https.
+    1. **@sec_cyl@** is the secondary number of cylinders for ZFAM files.
     *Note: the path is created by the @org@ and @appname@ values; /resources/ecs/@org@/@appname@.*
 
-1. Submit the DEFZC@@ job to define the instance.
+1. Submit the DEFZC## job to define the instance.
 
 1. Install the ZECS instance CSD group. The CSD group name begins with ZC and ends with the @id@ value used above. So if
 the @id@ was 00, the group name is ZC00. No job has been supplied to install the definitions. Install by cold starting
 CICS, using CICS Explorer, or using CEDA INSTALL.
 
-1. Define a named counter for the ZECS instance. Run transaction ZCNC in one of the CICS regions with the above group
-name following it. Using the example above, the transaction would be ran as follows: ZCNC,ZC00
+1. Define a named counter for the ZECS instance and trigger the expiry process. Run transaction ZNCD in one of the CICS
+regions with the above group name following it. Using the example above, the transaction would be ran as follows:
+ZNCD,ZC00
 
 ### Securing the caching service
 One or more userids can be given specific privileges to a specific ZECS instance. There are three permission levels that
@@ -201,8 +201,8 @@ User=USERID2 ,SELECT
 User=USERID2 ,UPDATE
 User=USERID3 ,SELECT
 
-In the JCL library, edit ZC@@SD. Add the userids and there permission levels to the SYSUT1 DD. Change all occurrences of
-## to the value used for @id@ when defining the instance. The job will create a document template member and define it
+In the JCL library, edit ZC##SD. Add the userids and their permission levels to the SYSUT1 DD. Change all occurrences of
+"##" to the value used for @id@ when defining the instance. The job will create a document template member and define it
 to the instance group. Submit the job. Upon successful completion, install the document template definition.
 
 ### Replication
@@ -214,7 +214,7 @@ number.
 To define the replication port, submit CSDZECSR in the JCL library to define the ZECSREPL TCPIPService definition. After
 the job has completed, install the ZECSREPL definition. This should be done in both the primary and alternate environments.
 
-To enable replication for an instance of ZECS, edit ZC@@DC in the JCL library and modify the SYSUT1 DD. The valid values
+To enable replication for an instance of ZECS, edit ZC##DC in the JCL library and modify the SYSUT1 DD. The valid values
 for type are AA, AS and A1. AA is for active-active replication. AS is for active-standby and A1 is stand alone. The
 second line is the host name and port of the opposing environment. The primary environment will need to have the
 alternate's host name and port defined. And the alternate environment with to have the primary's host name and port
