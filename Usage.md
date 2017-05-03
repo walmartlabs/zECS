@@ -1,4 +1,4 @@
-#Usage
+# Usage
 
 ## Code Examples
 
@@ -27,6 +27,7 @@ Variables used in these examples:
 	http://hostname:port@path@/@key@
 	
 ### JavaScript:
+
 - This small snippet of code will show how to write, read and delete a key/value pair to the zECS instance.
 	
     ```javascript
@@ -53,8 +54,7 @@ Variables used in these examples:
 	svc.send( ecs_value );
 	alert("DELETE Dodgers from zECS: " + "Status=" + svc.status + ":" + svc.statusText + "\nResponse=" + svc.responseText );
 	// On return we get HTTP status:200 with status text:Ok
-```
-
+    ```
 
 ## HTTP Status Codes
 - 200 - Success
