@@ -1,0 +1,13 @@
+name: zECS
+description: A property group to enable IBM Z Open Editor to resolve COBOL copybooks
+# See https://ibm.github.io/zopeneditor-about/Docs/zapp.html for documentation of YAML syntax for ZAPP (Z APPlication) files.
+version: 1.0.0
+author:
+  name: Ian J Mitchell
+
+property-groups:
+  - name: cobol-local
+    language: cobol
+    type: local
+    syslib:
+      - "**/Source"
